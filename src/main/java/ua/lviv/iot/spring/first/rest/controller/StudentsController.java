@@ -54,7 +54,11 @@ public class StudentsController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<Student> updateStudent(final @PathVariable("id") Integer studentId, final @RequestBody Student student) {
       student.setId(studentId);
-        HttpStatus status = students.put(studentId,student) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
-        return ResponseEntity.status(status).build();
+      if(students.get(studentId) == null) {
+          return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
+      } else {
+          students.put(studentId,student);
+          return new ResponseEntity<Student>(student, HttpStatus.OK);
+      }
     }
 }
