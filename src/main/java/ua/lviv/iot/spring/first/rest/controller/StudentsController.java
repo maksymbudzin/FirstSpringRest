@@ -24,41 +24,37 @@ import ua.lviv.iot.spring.first.rest.model.Student;
 @RequestMapping("/students")
 @RestController
 public class StudentsController {
-    
+
     private Map<Integer, Student> students = new HashMap<>();
     private AtomicInteger idCounter = new AtomicInteger();
-    
+
     @GetMapping
     public List<Student> getStudents() {
         return new LinkedList<Student>(students.values());
     }
-    
+
     @GetMapping(path = "/{id}")
     public Student getStudent(final @PathVariable("id") Integer studentId) {
         return students.get(studentId);
     }
-    
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE,"application/xml;charset=UTF-8"})
+
+    @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, "application/xml;charset=UTF-8" })
     public Student createStudent(final @RequestBody Student student) {
         student.setId(idCounter.incrementAndGet());
-        students.put(student.getId(),student);
+        students.put(student.getId(), student);
         return student;
     }
-    
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable("id") Integer studentId) {
         HttpStatus status = students.remove(studentId) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
-            return ResponseEntity.status(status).build();
-    }        
-    
+        return ResponseEntity.status(status).build();
+    }
+
     @PutMapping(path = "/{id}")
-    public Student updateStudent(final @PathVariable("id") Integer studentId, final @RequestBody Student student) {
+    public ResponseEntity<Student> updateStudent(final @PathVariable("id") Integer studentId, final @RequestBody Student student) {
       student.setId(studentId);
-      HttpStatus status = students.put(studentId,student) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
-      if(status == HttpStatus.OK) {
-          return students.put(student.getId(),student);
-      } else {
-          return null;
-      }
+        HttpStatus status = students.put(studentId,student) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
+        return ResponseEntity.status(status).build();
     }
 }
