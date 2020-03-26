@@ -1,7 +1,17 @@
 package ua.lviv.iot.spring.first.rest.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+//клас, який ми зберігаєм в базу даних
 public class Student {
 
+    @Id
+    //розрізняється по id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String firstName;
     private String lastName;
