@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ua.lviv.iot.spring.first.business.StudentService;
 import ua.lviv.iot.spring.first.rest.model.Student;
 
 @RequestMapping("/students")
@@ -27,6 +29,9 @@ public class StudentsController {
 
     private Map<Integer, Student> students = new HashMap<>();
     private AtomicInteger idCounter = new AtomicInteger();
+    
+    @Autowired
+    private StudentService studentService;
 
     @GetMapping
     public List<Student> getStudents() {
@@ -42,6 +47,7 @@ public class StudentsController {
     public Student createStudent(final @RequestBody Student student) {
         student.setId(idCounter.incrementAndGet());
         students.put(student.getId(), student);
+        System.out.println(studentService.createStudent(student));
         return student;
     }
 
