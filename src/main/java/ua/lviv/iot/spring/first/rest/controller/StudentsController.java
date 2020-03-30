@@ -1,11 +1,9 @@
 package ua.lviv.iot.spring.first.rest.controller;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.lviv.iot.spring.first.business.StudentService;
@@ -35,12 +32,12 @@ public class StudentsController {
 
     @GetMapping
     public List<Student> getStudents() {
-        return new LinkedList<Student>(students.values());
+        return studentService.getStudents();
     }
 
     @GetMapping(path = "/{id}")
     public Student getStudent(final @PathVariable("id") Integer studentId) {
-        return students.get(studentId);
+        return studentService.getStudent(studentId);
     }
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, "application/xml;charset=UTF-8" })
@@ -53,18 +50,14 @@ public class StudentsController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable("id") Integer studentId) {
-        HttpStatus status = students.remove(studentId) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
-        return ResponseEntity.status(status).build();
+//        HttpStatus status = students.remove(studentId) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
+//        return ResponseEntity.status(status).build();
+          HttpStatus status = studentService.deleteStudent(studentId);
+          return ResponseEntity.status(status).build();
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Student> updateStudent(final @PathVariable("id") Integer studentId, final @RequestBody Student student) {
-      student.setId(studentId);
-      if(students.get(studentId) == null) {
-          return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
-      } else {
-          students.put(studentId,student);
-          return new ResponseEntity<Student>(student, HttpStatus.OK);
-      }
+      return studentService.updateStudent(student, studentId);
     }
 }
