@@ -42,10 +42,7 @@ public class StudentsController {
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, "application/xml;charset=UTF-8" })
     public Student createStudent(final @RequestBody Student student) {
-        student.setId(idCounter.incrementAndGet());
-        students.put(student.getId(), student);
-        System.out.println(studentService.createStudent(student));
-        return student;
+        return studentService.createStudent(student);
     }
 
     @DeleteMapping(path = "/{id}")
