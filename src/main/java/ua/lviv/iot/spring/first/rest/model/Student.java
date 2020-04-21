@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -20,15 +21,19 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
     private String firstName;
+
     private String lastName;
 
     @ManyToOne(fetch = FetchType.EAGER)
+
     @JoinColumn(name = "group_id")
     @JsonIgnoreProperties("students")
     private Group group_id;
 
     @ManyToMany(mappedBy = "students")
+
     @JsonIgnoreProperties("students")
     private Set<Subject> subjects;
 

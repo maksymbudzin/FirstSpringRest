@@ -18,7 +18,9 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer id;
+
     private String name;
+
     private Integer enrollmentYear;
 
     @OneToMany(mappedBy = "group_id")
